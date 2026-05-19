@@ -3,7 +3,7 @@
 import socket
 import json
 import logging
-from typing import Optional, Callable
+from typing import Optional
 
 logger = logging.getLogger(__name__)
 

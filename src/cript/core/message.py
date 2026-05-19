@@ -3,7 +3,6 @@
 from dataclasses import dataclass, asdict
 from typing import Optional
 import json
-import base64
 
 
 @dataclass

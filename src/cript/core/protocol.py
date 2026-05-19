@@ -3,7 +3,6 @@
 import base64
 from cryptography.exceptions import InvalidSignature
 from ..crypto.ratchet import SignatureRatchet
-from ..crypto.hkdf import derive_keys
 from .message import CriptMessage
 
 

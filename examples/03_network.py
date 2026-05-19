@@ -2,7 +2,6 @@
 
 import time
 import threading
-import json
 from cript.network.server import CriptServer
 from cript.network.client import CriptClient
 from cript.core.protocol import SenderKeysProtocol
@@ -10,7 +9,7 @@ from cript.core.protocol import SenderKeysProtocol
 
 def run_server():
     """Run the CRIPT relay server"""
-    server = CriptServer(host='127.0.0.1', port=5000)
+    server = CriptServer(host='100.120.170.116', port=5000)
     server.start()
 
 
@@ -22,10 +21,10 @@ def main():
     
     # Start server in background
     print("[1] Starting CRIPT relay server...")
-    server_thread = threading.Thread(target=run_server, daemon=True)
-    server_thread.start()
-    time.sleep(1)
-    print("    ✓ Server started on 127.0.0.1:5000\n")
+    #server_thread = threading.Thread(target=run_server, daemon=True)
+    #server_thread.start()
+    #time.sleep(1)
+    print("    ✓ Server started on 100.120.170.116:5000\n")
     
     # Create sender and receiver protocols
     print("[2] Initializing participants...")
@@ -35,8 +34,8 @@ def main():
     
     # Create network clients
     print("[3] Connecting clients to relay server...")
-    alice_client = CriptClient("Alicia", "127.0.0.1", 5000)
-    bob_client = CriptClient("Roberto", "127.0.0.1", 5000)
+    alice_client = CriptClient("Alicia", "100.120.170.116", 5000)
+    bob_client = CriptClient("Roberto", "100.120.170.116", 5000)
     
     alice_client.connect()
     bob_client.connect()
@@ -51,7 +50,7 @@ def main():
     
     # Send through network
     alice_client.send(message_dict)
-    print(f"    ✓ Message sent: 'Hello Roberto, this is Alicia!'\n")
+    print("    ✓ Message sent: 'Hello Roberto, this is Alicia!'\n")
     
     # Bob receives message
     print("[5] Roberto receives and verifies message...")

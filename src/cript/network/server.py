@@ -4,7 +4,7 @@ import socket
 import threading
 import json
 import logging
-from typing import List, Callable
+from typing import List
 
 logger = logging.getLogger(__name__)
 

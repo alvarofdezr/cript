@@ -27,16 +27,16 @@ def main():
     print("[SCENARIO 1] Legitimate message transmission")
     print("-" * 70)
     legitimate_msg = sender.create_message("Transfer $100 to trusted account")
-    print(f"Alicia sends: 'Transfer $100 to trusted account'")
+    print("Alicia sends: 'Transfer $100 to trusted account'")
     print(f"Signature: {legitimate_msg.signature[:32]}...")
     
     if receiver.verify_message(legitimate_msg):
-        print(f"✓ Roberto VERIFIED message\n")
+        print("✓ Roberto VERIFIED message\n")
     
     # 2. Tampering attack
     print("[SCENARIO 2] Tampering Attack - Eva modifies message")
     print("-" * 70)
-    print(f"Eva intercepts message and modifies it...")
+    print("Eva intercepts message and modifies it...")
     
     tampered_msg = sender.create_message("Transfer $1000 to attacker account")
     # Tamper: modify the ciphertext but keep original signature
@@ -44,8 +44,8 @@ def main():
         b"Cifrado(Transfer $10000 to Eva's account)"
     ).decode('utf-8')
     
-    print(f"Original message: 'Transfer $1000 to attacker account'")
-    print(f"Tampered content: 'Transfer $10000 to Eva's account'")
+    print("Original message: 'Transfer $1000 to attacker account'")
+    print("Tampered content: 'Transfer $10000 to Eva's account'")
     print(f"Original signature: {tampered_msg.signature[:32]}...")
     
     try:
@@ -71,7 +71,7 @@ def main():
     forged_msg.signature = base64.b64encode(forged_sig).decode('utf-8')
     
     print(f"Forged message from: '{forged_msg.sender_name}'")
-    print(f"Content: 'Steal all data - from Eva'")
+    print("Content: 'Steal all data - from Eva'")
     
     try:
         receiver.verify_message(forged_msg)

@@ -2,7 +2,6 @@
 
 import pytest
 from cryptography.exceptions import InvalidSignature
-from cryptography.hazmat.primitives import serialization
 
 from cript.crypto.keygen import generate_ecdsa_keypair
 from cript.crypto.ratchet import SignatureRatchet
