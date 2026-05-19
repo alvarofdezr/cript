@@ -1,0 +1,82 @@
+name: Tests with UV
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ['3.10', '3.11', '3.12']
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up UV
+      uses: astral-sh/setup-uv@v2
+      with:
+        version: latest
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install dependencies
+      run: uv sync --group dev
+    
+    - name: Lint with flake8
+      run: |
+        uv run flake8 src/cript tests --count --select=E9,F63,F7,F82 --show-source --statistics
+        uv run flake8 src/cript tests --count --exit-zero --max-complexity=10 --max-line-length=100 --statistics
+    
+    - name: Format check with black
+      run: uv run black --check src/cript tests
+      continue-on-error: true
+    
+    - name: Type check with mypy
+      run: uv run mypy src/cript --ignore-missing-imports
+      continue-on-error: true
+    
+    - name: Run tests with pytest
+      run: uv run pytest tests/ -v --cov=src/cript --cov-report=xml
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-${{ matrix.os }}-py${{ matrix.python-version }}
+      continue-on-error: true
+
+  security:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up UV
+      uses: astral-sh/setup-uv@v2
+      with:
+        version: latest
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: uv sync --group dev
+    
+    - name: Run Bandit security check
+      run: uv run bandit -r src/cript -ll
+      continue-on-error: true
+    
+    - name: Check for known vulnerabilities
+      run: uv run pip-audit
+      continue-on-error: true
