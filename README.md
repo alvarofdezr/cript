@@ -376,7 +376,7 @@ pre-commit install
 ## 📧 Contact & Support
 
 - **Issues**: [GitHub Issues](https://github.com/alvarofdezr/cript/issues)
-- **Email**: your.email@example.com
+- **Email**: alvarofdezr@outlook.es
 
 ---
 
