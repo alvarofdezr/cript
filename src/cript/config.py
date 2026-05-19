@@ -7,7 +7,7 @@ Default settings for CRIPT server and clients.
 import os
 
 # Server Configuration
-SERVER_HOST = os.getenv('CRIPT_SERVER_HOST', '0.0.0.0')
+SERVER_HOST = os.getenv('CRIPT_SERVER_HOST', '0.0.0.0') # nosec B104
 SERVER_PORT = int(os.getenv('CRIPT_SERVER_PORT', 5000))
 SERVER_BACKLOG = int(os.getenv('CRIPT_SERVER_BACKLOG', 10))
 

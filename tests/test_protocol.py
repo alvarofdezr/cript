@@ -108,7 +108,7 @@ class TestSignatureRatchet:
         assert len(signature) > 0
         
         # Verify signature
-        assert ratchet.verify_signature(signature, message, ratchet.ssk)
+        assert ratchet.verify_signature(signature, message, ratchet.spk)
     
     def test_invalid_signature_detection(self):
         """Test that invalid signatures are detected"""
@@ -119,7 +119,7 @@ class TestSignatureRatchet:
         modified_message = b"Modified message"
         
         with pytest.raises(InvalidSignature):
-            ratchet.verify_signature(signature, modified_message, ratchet.ssk)
+            ratchet.verify_signature(signature, modified_message, ratchet.spk)
     
     def test_key_export_import(self):
         """Test exporting and importing public keys"""
@@ -201,8 +201,7 @@ class TestSenderKeysProtocol:
         receiver.register_sender("Alice", initial_spk)
         
         # Should raise InvalidSignature
-        with pytest.raises((InvalidSignature, ValueError)):
-            receiver.verify_message(message)
+        assert receiver.verify_message(message) is False
     
     def test_message_serialization(self):
         """Test message JSON serialization"""
@@ -272,7 +271,7 @@ class TestSecurityProperties:
         signature = ratchet.sign_message(message)
         
         # Only the private key holder can create valid signatures
-        assert ratchet.verify_signature(signature, message, ratchet.ssk)
+        assert ratchet.verify_signature(signature, message, ratchet.spk)
 
 
 if __name__ == "__main__":

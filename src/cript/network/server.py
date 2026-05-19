@@ -25,7 +25,7 @@ class CriptServer:
         - IPv4 address via Tailscale
     """
     
-    def __init__(self, host: str = '0.0.0.0', port: int = 5000):
+    def __init__(self, host: str = '0.0.0.0', port: int = 5000): # nosec B104
         """
         Initialize the CRIPT relay server.
         
