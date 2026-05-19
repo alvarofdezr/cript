@@ -1,9 +1,3 @@
-"""
-CRIPT Configuration
-
-Default settings for CRIPT server and clients.
-"""
-
 import os
 
 # Server Configuration

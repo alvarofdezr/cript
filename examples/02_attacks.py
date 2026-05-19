@@ -1,5 +1,3 @@
-"""Example 2: Attack simulation - tampering detection"""
-
 import base64
 from cryptography.exceptions import InvalidSignature
 from cript.core.protocol import SenderKeysProtocol

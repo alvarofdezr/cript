@@ -1,9 +1,7 @@
-"""Client implementation for CRIPT protocol"""
-
 import socket
 import json
 import logging
-from typing import Optional
+from typing import Optional, Dict, Any
 
 logger = logging.getLogger(__name__)
 
@@ -96,7 +94,7 @@ class CriptClient:
             data = self.socket.recv(4096)
             
             if data:
-                message = json.loads(data.decode('utf-8'))
+                message: Dict[str, Any] = json.loads(data.decode('utf-8'))
                 logger.info(f"[{self.name}] Message received from {message.get('sender_name')}")
                 return message
             

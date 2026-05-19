@@ -1,5 +1,3 @@
-"""Example 3: Network server and client demonstration"""
-
 import time
 from cript.network.server import CriptServer
 from cript.network.client import CriptClient

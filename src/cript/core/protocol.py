@@ -1,9 +1,8 @@
-"""Sender Keys Protocol implementation"""
-
 import base64
 from cryptography.exceptions import InvalidSignature
 from ..crypto.ratchet import SignatureRatchet
 from .message import CriptMessage
+from typing import Optional, Dict, Any
 
 
 class SenderKeysProtocol:
@@ -23,7 +22,7 @@ class SenderKeysProtocol:
     class Sender:
         """Sender side of the protocol"""
         
-        def __init__(self, name: str, initial_chain_key: bytes = None):
+        def __init__(self, name: str, initial_chain_key: Optional[bytes] = None):
             """
             Initialize a sender.
             
@@ -86,8 +85,8 @@ class SenderKeysProtocol:
                 name: Receiver identity
             """
             self.name = name
-            self.sender_keys = {}  # sender_name -> public_key
-            self.message_count = {}  # sender_name -> count
+            self.sender_keys: Dict[str, Any] = {}
+            self.message_count: Dict[str, int] = {} 
         
         def register_sender(self, sender_name: str, spk_der: bytes):
             """

@@ -1,5 +1,3 @@
-"""Message model for CRIPT protocol"""
-
 from dataclasses import dataclass, asdict
 from typing import Optional
 import json

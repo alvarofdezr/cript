@@ -1,5 +1,3 @@
-"""HKDF-based key derivation for chain and message keys"""
-
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 

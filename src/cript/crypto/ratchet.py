@@ -1,11 +1,9 @@
-"""Signature Ratcheting mechanism implementation"""
-
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.exceptions import InvalidSignature
 from .keygen import generate_ecdsa_keypair
 from .hkdf import derive_keys
-from typing import Optional
+from typing import Optional, Any
 
 
 class SignatureRatchet:
@@ -20,7 +18,7 @@ class SignatureRatchet:
     Reference: Balbás et al. (2022) - Section on Signature Ratcheting
     """
     
-    def __init__(self, initial_chain_key: bytes = None):
+    def __init__(self, initial_chain_key: Optional[bytes] = None):
         """
         Initialize the signature ratchet.
         
@@ -55,7 +53,7 @@ class SignatureRatchet:
         
         return current_spk, self.chain_key
     
-    def sign_message(self, message: bytes, key: Optional[object] = None) -> bytes:
+    def sign_message(self, message: bytes, key: Optional[Any] = None) -> bytes:
         """
         Sign a message with the current static sender key.
         
@@ -66,11 +64,11 @@ class SignatureRatchet:
         Returns:
             bytes: ECDSA signature (DER encoded)
         """
-        key = key or self.ssk
-        signature = key.sign(message, ec.ECDSA(hashes.SHA256()))
+        key_to_use = key or self.ssk
+        signature: bytes = key_to_use.sign(message, ec.ECDSA(hashes.SHA256()))
         return signature
     
-    def verify_signature(self, signature: bytes, message: bytes, public_key: object) -> bool:
+    def verify_signature(self, signature: bytes, message: bytes, public_key: Any) -> bool:
         """
         Verify a message signature against a public key.
         
@@ -92,7 +90,7 @@ class SignatureRatchet:
         except InvalidSignature:
             raise
     
-    def export_public_key(self, public_key: object) -> bytes:
+    def export_public_key(self, public_key: Any) -> bytes:
         """
         Export public key to DER format for transmission.
         
@@ -102,12 +100,13 @@ class SignatureRatchet:
         Returns:
             bytes: DER-encoded public key
         """
-        return public_key.public_bytes(
-            encoding=serialization.Encoding.DER,
-            format=serialization.PublicFormat.SubjectPublicKeyInfo
-        )
+        der_bytes: bytes = public_key.public_bytes(
+        encoding=serialization.Encoding.DER,
+        format=serialization.PublicFormat.SubjectPublicKeyInfo
+            )
+        return der_bytes
     
-    def import_public_key(self, der_bytes: bytes) -> object:
+    def import_public_key(self, der_bytes: bytes) -> Any:
         """
         Import public key from DER format.
         

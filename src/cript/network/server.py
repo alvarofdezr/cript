@@ -1,5 +1,3 @@
-"""Server implementation for CRIPT message relay"""
-
 import socket
 import threading
 import json

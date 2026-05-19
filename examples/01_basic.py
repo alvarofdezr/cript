@@ -1,5 +1,3 @@
-"""Example 1: Basic sender and receiver demonstration"""
-
 from cript.core.protocol import SenderKeysProtocol
 from cript.crypto.ratchet import SignatureRatchet
 from cryptography.exceptions import InvalidSignature

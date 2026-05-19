@@ -1,5 +1,3 @@
-"""ECDSA key generation utilities"""
-
 from cryptography.hazmat.primitives.asymmetric import ec
 from typing import Tuple
 

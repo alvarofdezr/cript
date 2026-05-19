@@ -1,5 +1,3 @@
-"""Comprehensive tests for CRIPT protocol"""
-
 import pytest
 from cryptography.exceptions import InvalidSignature
 
