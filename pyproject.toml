@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
-    {name = "Álvaro Fernández Ramos},
+    {name = "Álvaro Fernández Ramos"},
 ]
 keywords = ["cryptography", "group-messaging", "sender-keys", "signature-ratcheting", "protocol", "security"]
 classifiers = [
