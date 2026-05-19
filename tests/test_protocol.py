@@ -169,7 +169,7 @@ class TestSenderKeysProtocol:
         """Test verifying a valid message"""
         # Create sender and send message
         sender = SenderKeysProtocol.Sender(name="Alice")
-        message = sender.create_message("Hello!")
+        sender.create_message("Hello!")
         
         # Receiver: Extract initial sender key
         ratchet = SignatureRatchet()

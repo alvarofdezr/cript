@@ -1,7 +1,6 @@
 """Example 3: Network server and client demonstration"""
 
 import time
-import threading
 from cript.network.server import CriptServer
 from cript.network.client import CriptClient
 from cript.core.protocol import SenderKeysProtocol
@@ -29,7 +28,7 @@ def main():
     # Create sender and receiver protocols
     print("[2] Initializing participants...")
     alice_proto = SenderKeysProtocol.Sender(name="Alicia")
-    bob_proto = SenderKeysProtocol.Receiver(name="Roberto")
+    SenderKeysProtocol.Receiver(name="Roberto")
     print("    ✓ Protocol instances created\n")
     
     # Create network clients

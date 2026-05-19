@@ -16,7 +16,6 @@ def main():
     print("[SETUP] Initializing participants...")
     sender = SenderKeysProtocol.Sender(name="Alicia")
     receiver = SenderKeysProtocol.Receiver(name="Roberto")
-    eavesdropper = "Eva (attacker)"
     
     ratchet = SignatureRatchet()
     initial_spk_der = ratchet.export_public_key(sender.ratchet.spk)
