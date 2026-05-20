@@ -1,14 +1,7 @@
 import time
-from cript.network.server import CriptServer
+import base64
 from cript.network.client import CriptClient
 from cript.core.protocol import SenderKeysProtocol
-
-
-def run_server():
-    """Run the CRIPT relay server"""
-    server = CriptServer(host='100.120.170.116', port=5000)
-    server.start()
-
 
 def main():
     print("=" * 70)
@@ -16,17 +9,13 @@ def main():
     print("=" * 70)
     print()
     
-    # Start server in background
-    print("[1] Starting CRIPT relay server...")
-    #server_thread = threading.Thread(target=run_server, daemon=True)
-    #server_thread.start()
-    #time.sleep(1)
-    print("    ✓ Server started on 100.120.170.116:5000\n")
+    print("[1] Using external CRIPT relay server (Ubuntu via Tailscale)...")
+    print("    ✓ Assuming Server is running on 100.120.170.116:5000\n")
     
     # Create sender and receiver protocols
     print("[2] Initializing participants...")
     alice_proto = SenderKeysProtocol.Sender(name="Alicia")
-    SenderKeysProtocol.Receiver(name="Roberto")
+    bob_proto = SenderKeysProtocol.Receiver(name="Roberto")
     print("    ✓ Protocol instances created\n")
     
     # Create network clients
@@ -41,22 +30,24 @@ def main():
     # Exchange messages
     print("[4] Alicia sends message through relay...")
     
-    # Alicia creates a signed message
     message = alice_proto.create_message("Hello Roberto, this is Alicia!")
     message_dict = message.to_dict()
     
-    # Send through network
     alice_client.send(message_dict)
-    print("    ✓ Message sent: 'Hello Roberto, this is Alicia!'\n")
+    print(f"    ✓ Message sent: 'Hello Roberto, this is Alicia!'\n")
     
     # Bob receives message
     print("[5] Roberto receives and verifies message...")
-    time.sleep(0.5)  # Give server time to relay
+    time.sleep(0.5) 
     
     received = bob_client.receive(timeout=2.0)
     if received:
         print(f"    ✓ Received from: {received['sender_name']}")
-        print(f"      Content: {received['ciphertext']}")
+        
+        # Descodificamos de Base64 para que se lea bonito en consola
+        plaintext = base64.b64decode(received['ciphertext']).decode('utf-8')
+        
+        print(f"      Content: {plaintext}")
         print(f"      Has ratchet: {'next_spk' in received}\n")
     else:
         print("    ⚠ No message received (timeout)\n")
@@ -76,9 +67,8 @@ def main():
     print("    1. Install Tailscale: curl -fsSL https://tailscale.com/install.sh | sh")
     print("    2. Authenticate: sudo tailscale up")
     print("    3. Get Tailscale IP: ip addr show tailscale0")
-    print("    4. Run server: python -m cript.network.server")
+    print("    4. Run server: uv run python -m cript.network.server")
     print()
-
 
 if __name__ == "__main__":
     main()

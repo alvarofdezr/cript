@@ -44,16 +44,14 @@ class SenderKeysProtocol:
             Returns:
                 CriptMessage: Signed and ratcheted message
             """
-            # Ratchet forward
-            current_spk, _ = self.ratchet.ratchet_forward()
+            signing_key = self.ratchet.ssk
             
-            # Create ciphertext (placeholder - can use AES-GCM in production)
+            self.ratchet.ratchet_forward()
+            
             ciphertext = f"Cifrado({plaintext})".encode('utf-8')
             
-            # Sign
-            signature = self.ratchet.sign_message(ciphertext)
+            signature = self.ratchet.sign_message(ciphertext, key=signing_key)
             
-            # Export ephemeral public key
             next_spk_der = self.ratchet.export_public_key(self.ratchet.spk)
             next_spk_b64 = base64.b64encode(next_spk_der).decode('utf-8')
             

@@ -1,7 +1,5 @@
 from cript.core.protocol import SenderKeysProtocol
 from cript.crypto.ratchet import SignatureRatchet
-from cryptography.exceptions import InvalidSignature
-
 
 def main():
     print("=" * 60)
@@ -21,8 +19,16 @@ def main():
     print(f"    ✓ Receiver ready: {receiver.export_state()}")
     print()
     
-    # 3. Create and sign messages
-    print("[3] Alicia sends messages...")
+    # 3. Register sender at receiver
+    print("[3] Roberto registers Alicia's initial public key...")
+    ratchet = SignatureRatchet()
+    initial_spk_der = ratchet.export_public_key(sender.ratchet.spk)
+    receiver.register_sender("Alicia", initial_spk_der)
+    print(f"    ✓ Alicia registered. State: {receiver.export_state()}")
+    print()
+
+    # 4. Create and sign messages
+    print("[4] Alicia sends messages...")
     messages = []
     for i in range(3):
         content = f"Secure message #{i+1} from Alicia"
@@ -33,32 +39,20 @@ def main():
         print(f"      - Signature length: {len(msg.signature)}")
         print()
     
-    # 4. Register sender at receiver
-    print("[4] Roberto registers Alicia...")
-    ratchet = SignatureRatchet()
-    initial_spk_der = ratchet.export_public_key(sender.ratchet.spk)
-    receiver.register_sender("Alicia", initial_spk_der)
-    print(f"    ✓ Alicia registered. State: {receiver.export_state()}")
-    print()
-    
     # 5. Verify messages
-    print("[5] Roberto verifies incoming messages...")
+    print("[5] Roberto verifies incoming messages sequentially...")
     for i, msg in enumerate(messages):
-        try:
-            is_valid = receiver.verify_message(msg)
-            if is_valid:
-                content = receiver.get_decrypted_content(msg)
-                print(f"    ✓ Message {i+1} verified: {content}")
-            else:
-                print(f"    ✗ Message {i+1} verification failed")
-        except InvalidSignature:
+        is_valid = receiver.verify_message(msg)
+        if is_valid:
+            content = receiver.get_decrypted_content(msg)
+            print(f"    ✓ Message {i+1} verified: {content}")
+        else:
             print(f"    ✗ Message {i+1} INVALID SIGNATURE - TAMPERING DETECTED!")
     
     print()
     print("=" * 60)
     print("✓ Example completed successfully!")
     print("=" * 60)
-
 
 if __name__ == "__main__":
     main()
